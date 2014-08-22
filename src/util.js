@@ -22,6 +22,30 @@ var util = {
 
           return String.fromCharCode(first) + String.fromCharCode(second);
       }
+  },
+  drawGrid: function(ctx, hspacing, vspacing, style) {
+    ctx.strokeStyle = style;
+    var width = ctx.canvas.width;
+    var height = ctx.canvas.height;
+    var i = 1;
+    // draw vertical lines
+    while (i < width) {
+      ctx.beginPath();
+      ctx.moveTo(i*hspacing, 0);
+      ctx.lineTo(i*hspacing, height);
+      ctx.stroke();
+      i++;
+    }
+
+    //draw horizontal lines
+    i = 1;
+    while(i < height) {
+      ctx.beginPath();
+      ctx.moveTo(0, i*vspacing);
+      ctx.lineTo(width, i*vspacing);
+      ctx.stroke();
+      i++;
+    }
   }
 }
 
