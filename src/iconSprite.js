@@ -13,20 +13,24 @@ IconSprite.prototype.update = function(options) {
   this.height = (options.height !== undefined) ? options.height : 20;
   this.fontSize = (options.fontSize !== undefined) ? options.fontSize : 20;
   this.color = (options.color !== undefined) ? options.color : 'rgb(0,0,0)';
-}
 
-IconSprite.prototype.draw = function(ctx) {
-  ctx.save();
+  this.canvas = document.createElement('canvas');
+  this.canvas.width = this.width;
+  this.canvas.height = this.height;
+  var ctx = this.canvas.getContext('2d');
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
   ctx.fillStyle = this.color;
   ctx.font = this.fontSize + 'px ' + this.fontName;
+  ctx.fillText(this.char, this.width/2, this.height/2);
   if (IconSprite.debug) {
     ctx.strokeStyle = 'rgb(255, 0, 0)';
     ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
-  ctx.fillText(this.char, this.x + (this.width/2), this.y + (this.height/2));
-  ctx.restore();
+}
+
+IconSprite.prototype.draw = function(ctx) {
+  ctx.drawImage(this.canvas, this.x, this.y);
 };
 
 module.exports = IconSprite;
