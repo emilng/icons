@@ -13,6 +13,13 @@ var IconSprite = function(fontName, cp, options) {
   this.color = (options.color !== undefined) ? options.color : 'rgb(0,0,0)';
 }
 
+IconSprite.prototype.update = function(options) {
+  this.x = options.x;
+  this.y = options.y;
+  this.width = options.width;
+  this.height = options.height;
+  this.fontSize = options.fontSize;
+  this.color = options.color;
 }
 
 IconSprite.prototype.draw = function(ctx) {

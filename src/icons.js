@@ -13,6 +13,7 @@ window.onload = function(event){
 
   var arrows = [];
 
+  var newArrow = function(instance) {
     var size = Math.ceil(Math.random()*400);
     var shade = Math.round(Math.random()*255);
     var spriteOptions = {
@@ -24,7 +25,12 @@ window.onload = function(event){
       color: "rgba(" +shade + "," + shade + "," + shade + "," + Math.random() + ")"
     };
     var iconSprite;
+    if (instance !== undefined) {
+      instance.update(spriteOptions);
+      iconSprite = instance;
+    } else {
       iconSprite = new IconSprite('Entypo', 0x2B06, spriteOptions); // up arrow
+    }
       // iconSprite = new IconSprite('Entypo', 0x1F506, spriteOptions); // sun
       // iconSprite = new IconSprite('Entypo', 0x2601, spriteOptions); // cloud
       // iconSprite = new IconSprite('Entypo', 0x1F4A6, spriteOptions); // rain drop
@@ -54,6 +60,7 @@ window.onload = function(event){
     for(var i = 0; i < len; i++) {
       var arrow = arrows[i];
       if ((arrow.y + arrow.height) < 0) {
+        newArrow(arrow);
       } else {
         arrow.y = arrow.y - arrow.speed;
       }
