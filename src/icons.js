@@ -13,13 +13,16 @@ window.onload = function(event){
 
   var arrows = [];
 
+  // IconSprite.debug = true;
+
   var newArrow = function(instance) {
     var size = Math.ceil(Math.random()*400);
     var shade = Math.round(Math.random()*255);
+    var rotation = Math.random() * 360 * (Math.PI/180);
     var spriteOptions = {
       x: Math.ceil(Math.random()*(width-size)),
       y: Math.ceil(Math.random()*height),
-      rotation: Math.random() * 360 * (Math.PI/180),
+      rotation: rotation,
       width: size,
       height: size,
       fontSize: size,
@@ -30,14 +33,16 @@ window.onload = function(event){
       instance.update(spriteOptions);
       iconSprite = instance;
     } else {
-      iconSprite = new IconSprite('Entypo', 0x2B06, spriteOptions); // up arrow
+      iconSprite = new IconSprite('Entypo', 0x2B05, spriteOptions); // left arrow
     }
       // iconSprite = new IconSprite('Entypo', 0x1F506, spriteOptions); // sun
       // iconSprite = new IconSprite('Entypo', 0x2601, spriteOptions); // cloud
       // iconSprite = new IconSprite('Entypo', 0x1F4A6, spriteOptions); // rain drop
       // iconSprite = new IconSprite('Entypo', 0x266A, spriteOptions); // music note
       // iconSprite = new IconSprite('Entypo', 0x2191, spriteOptions); // thin up arrow
-    iconSprite.speed = 1/size * 120;
+    var speed = 1/size * 120;
+    iconSprite.speedx = Math.cos(rotation) * speed;
+    iconSprite.speedy = Math.sin(rotation) * speed;
     return iconSprite;
   };
 
@@ -67,16 +72,20 @@ window.onload = function(event){
       stats.begin();
 
       ctx.clearRect(0, 0, width, height);
-      if (arrows.length < 300) {
+      if (arrows.length < 200) {
         arrows.push(newArrow());
       }
       var len = arrows.length;
       for(var i = 0; i < len; i++) {
         var arrow = arrows[i];
-        if ((arrow.y + arrow.height) < 0) {
+        if (((arrow.y + arrow.height) < 0) ||
+            (arrow.y > height) ||
+            (arrow.x + arrow.width < 0) ||
+            (arrow.x > width)) {
           newArrow(arrow);
         } else {
-          arrow.y = arrow.y - arrow.speed;
+          arrow.x = arrow.x - arrow.speedx;
+          arrow.y = arrow.y - arrow.speedy;
         }
         arrow.draw(ctx);
       }
