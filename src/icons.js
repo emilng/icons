@@ -1,5 +1,6 @@
 var util = require('./util.js');
 var IconSprite = require('./iconSprite.js');
+var Stats = require('../lib/stats.js');
 
 window.onload = function(event){
   console.log('page loaded');
@@ -28,7 +29,18 @@ window.onload = function(event){
     return iconSprite;
   };
 
+  var stats = new Stats();
+  stats.setMode(0); // 0: fps, 1: ms
+
+  // Align top-left
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+
+  document.body.appendChild( stats.domElement );
+
   var render = function() {
+    stats.begin();
     ctx.clearRect(0, 0, width, height);
     if (arrows.length < 300) {
       arrows.push(newArrow());
@@ -43,6 +55,7 @@ window.onload = function(event){
       }
       arrow.draw(ctx);
     }
+    stats.end();
     
     requestAnimationFrame(render);
   };

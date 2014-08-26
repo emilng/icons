@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     },
     browserify: {
       client: {
-        src: 'src/**/*.js',
+        src: ['lib/**/*.js','src/**/*.js'],
         dest: 'dist/icons.js'
       }
     },
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
         src: 'gruntfile.js'
       },
       lib_test: {
-        src: ['lib/**/*.js', 'test/**/*.js']
+        src: ['test/**/*.js']
       }
     },
     qunit: {
