@@ -3,23 +3,16 @@ var util = require('./util.js');
 var IconSprite = function(fontName, cp, options) {
   this.fontName = fontName;
   this.char = util.getUnicodeCharacter(cp);
+  this.update(options);
+}
 
-  // options = options || {};
+IconSprite.prototype.update = function(options) {
   this.x = (options.x !== undefined) ? options.x : 0;
   this.y = (options.y !== undefined) ? options.y : 0;
   this.width = (options.width !== undefined) ? options.width : 20;
   this.height = (options.height !== undefined) ? options.height : 20;
   this.fontSize = (options.fontSize !== undefined) ? options.fontSize : 20;
   this.color = (options.color !== undefined) ? options.color : 'rgb(0,0,0)';
-}
-
-IconSprite.prototype.update = function(options) {
-  this.x = options.x;
-  this.y = options.y;
-  this.width = options.width;
-  this.height = options.height;
-  this.fontSize = options.fontSize;
-  this.color = options.color;
 }
 
 IconSprite.prototype.draw = function(ctx) {
