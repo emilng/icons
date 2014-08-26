@@ -19,6 +19,7 @@ window.onload = function(event){
     var spriteOptions = {
       x: Math.ceil(Math.random()*(width-size)),
       y: Math.ceil(Math.random()*height),
+      rotation: Math.random() * 360 * (Math.PI/180),
       width: size,
       height: size,
       fontSize: size,
@@ -66,7 +67,7 @@ window.onload = function(event){
       stats.begin();
 
       ctx.clearRect(0, 0, width, height);
-      if (arrows.length < 25) {
+      if (arrows.length < 300) {
         arrows.push(newArrow());
       }
       var len = arrows.length;
@@ -84,7 +85,6 @@ window.onload = function(event){
       stats.end();
     }
 
-    
     requestAnimationFrame(render);
   };
 
