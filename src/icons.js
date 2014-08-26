@@ -50,23 +50,40 @@ window.onload = function(event){
 
   document.body.appendChild( stats.domElement );
 
+  // set fps
+  var fps = 30;
+  var fpsInterval = 1000/fps;
+  var previousTime = Date.now();
+  var currentTime = previousTime;
+  var elapsedTime = 0;
+
   var render = function() {
-    stats.begin();
-    ctx.clearRect(0, 0, width, height);
-    if (arrows.length < 300) {
-      arrows.push(newArrow());
-    }
-    var len = arrows.length;
-    for(var i = 0; i < len; i++) {
-      var arrow = arrows[i];
-      if ((arrow.y + arrow.height) < 0) {
-        newArrow(arrow);
-      } else {
-        arrow.y = arrow.y - arrow.speed;
+
+    currentTime = Date.now();
+    elapsedTime = currentTime - previousTime;
+
+    if (elapsedTime > fpsInterval) {
+      stats.begin();
+
+      ctx.clearRect(0, 0, width, height);
+      if (arrows.length < 25) {
+        arrows.push(newArrow());
       }
-      arrow.draw(ctx);
+      var len = arrows.length;
+      for(var i = 0; i < len; i++) {
+        var arrow = arrows[i];
+        if ((arrow.y + arrow.height) < 0) {
+          newArrow(arrow);
+        } else {
+          arrow.y = arrow.y - arrow.speed;
+        }
+        arrow.draw(ctx);
+      }
+      previousTime = currentTime - (elapsedTime % fpsInterval);
+
+      stats.end();
     }
-    stats.end();
+
     
     requestAnimationFrame(render);
   };
