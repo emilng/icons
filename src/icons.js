@@ -13,18 +13,23 @@ window.onload = function(event){
 
   var arrows = [];
 
-  var newArrow = function() {
     var size = Math.ceil(Math.random()*400);
     var shade = Math.round(Math.random()*255);
-    var color = "rgba(" +shade + "," + shade + "," + shade + "," + Math.random() + ")";
-    var x = Math.ceil(Math.random()*(width-size));
-    var y = Math.ceil(Math.random()*height);
-    var iconSprite = new IconSprite('Entypo', 0x1F506, x, y, size, size, size, color); // sun
-    // var iconSprite = new IconSprite('Entypo', 0x2601, x, y, size, size, size, color); // cloud
-    // var iconSprite = new IconSprite('Entypo', 0x1F4A6, x, y, size, size, size, color); // rain drop
-    // var iconSprite = new IconSprite('Entypo', 0x266A, x, y, size, size, size, color); // music note
-    // var iconSprite = new IconSprite('Entypo', 0x2191, x, y, size, size, size, color); // thin up arrow
-    // var iconSprite = new IconSprite('Entypo', 0x2B06, x, y, size, size, size, color); // up arrow
+    var spriteOptions = {
+      x: Math.ceil(Math.random()*(width-size)),
+      y: Math.ceil(Math.random()*height),
+      width: size,
+      height: size,
+      fontSize: size,
+      color: "rgba(" +shade + "," + shade + "," + shade + "," + Math.random() + ")"
+    };
+    var iconSprite;
+      iconSprite = new IconSprite('Entypo', 0x2B06, spriteOptions); // up arrow
+      // iconSprite = new IconSprite('Entypo', 0x1F506, spriteOptions); // sun
+      // iconSprite = new IconSprite('Entypo', 0x2601, spriteOptions); // cloud
+      // iconSprite = new IconSprite('Entypo', 0x1F4A6, spriteOptions); // rain drop
+      // iconSprite = new IconSprite('Entypo', 0x266A, spriteOptions); // music note
+      // iconSprite = new IconSprite('Entypo', 0x2191, spriteOptions); // thin up arrow
     iconSprite.speed = 1/size * 120;
     return iconSprite;
   };
@@ -49,7 +54,6 @@ window.onload = function(event){
     for(var i = 0; i < len; i++) {
       var arrow = arrows[i];
       if ((arrow.y + arrow.height) < 0) {
-        arrow = arrows[i] = newArrow();
       } else {
         arrow.y = arrow.y - arrow.speed;
       }
