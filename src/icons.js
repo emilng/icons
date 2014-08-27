@@ -18,7 +18,7 @@ window.onload = function(event){
   var newArrow = function(instance) {
     var size = Math.ceil(Math.random()*400);
     var shade = Math.round(Math.random()*255);
-    var rotation = Math.random() * 360 * (Math.PI/180);
+    var rotation = Math.random() * 2 * Math.PI;
     var spriteOptions = {
       x: Math.ceil(Math.random()*(width-size)),
       y: Math.ceil(Math.random()*height),
