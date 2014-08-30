@@ -1,14 +1,12 @@
 var util = require('./util.js');
 
-var IconSprite = function(fontName, cp, options) {
+var IconTexture = function(fontName, cp, options) {
   this.fontName = fontName;
   this.char = util.getUnicodeCharacter(cp);
   this.update(options);
 }
 
-IconSprite.prototype.update = function(options) {
-  this.x = (options.x !== undefined) ? options.x : 0;
-  this.y = (options.y !== undefined) ? options.y : 0;
+IconTexture.prototype.update = function(options) {
   this.rotation = (options.rotation !== undefined) ? options.rotation : 0;
   this.width = (options.width !== undefined) ? options.width : 20;
   this.height = (options.height !== undefined) ? options.height : 20;
@@ -24,7 +22,7 @@ IconSprite.prototype.update = function(options) {
   ctx.fillStyle = this.color;
   ctx.font = this.fontSize + 'px ' + this.fontName;
 
-  if (IconSprite.debug) {
+  if (IconTexture.debug) {
     ctx.strokeStyle = 'rgb(255, 0, 0)';
     ctx.strokeRect(0, 0, this.width, this.height);
   }
@@ -34,8 +32,4 @@ IconSprite.prototype.update = function(options) {
   ctx.fillText(this.char, 0, 0);
 }
 
-IconSprite.prototype.draw = function(ctx) {
-  ctx.drawImage(this.canvas, this.x, this.y);
-};
-
-module.exports = IconSprite;
+module.exports = IconTexture;
