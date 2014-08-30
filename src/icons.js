@@ -1,50 +1,66 @@
 var util = require('./util.js');
-var IconSprite = require('./iconSprite.js');
+var IconTexture = require('./iconTexture.js');
 var Stats = require('../lib/stats.js');
+var pixi = require('../lib/pixi.dev.js');
 
 window.onload = function(event){
   console.log('page loaded');
-  var canvas = document.getElementById('view_container');
-  var ctx = canvas.getContext('2d');
-  var height = canvas.height;
-  var width = canvas.width;
 
-  // util.drawGrid(ctx, 10, 10, 'rgba(0,0,0,0.5)');
+  var maxArrows = 200;
+
+  var stageWidth = 640;
+  var stageHeight = 640;
+
+  var stage = new pixi.Stage(0xEEEEEE);
+  var renderer = new pixi.autoDetectRenderer(stageWidth, stageHeight);
+  document.body.appendChild(renderer.view);
+
+  var maxSize = 400;
+  var iconOptions = {
+    width: maxSize,
+    height: maxSize,
+    fontSize: maxSize,
+  };
+  var arrowIconTexture = new IconTexture('Entypo', 0x2B05, iconOptions);
+  var arrowTexture = pixi.Texture.fromCanvas(arrowIconTexture.canvas);
 
   var arrows = [];
 
-  // IconSprite.debug = true;
-
-  var newArrow = function(instance) {
-    var size = Math.ceil(Math.random()*400);
-    var shade = Math.round(Math.random()*255);
-    var rotation = Math.random() * 2 * Math.PI;
-    var spriteOptions = {
-      x: Math.ceil(Math.random()*(width-size)),
-      y: Math.ceil(Math.random()*height),
-      rotation: rotation,
-      width: size,
-      height: size,
-      fontSize: size,
-      color: "rgba(" +shade + "," + shade + "," + shade + "," + Math.random() + ")"
-    };
-    var iconSprite;
-    if (instance !== undefined) {
-      instance.update(spriteOptions);
-      iconSprite = instance;
-    } else {
-      iconSprite = new IconSprite('Entypo', 0x2B05, spriteOptions); // left arrow
+  var initArrow = function(arrow) {
+    if ((arrow === undefined) && (arrows.length < maxArrows)) {
+      arrow = new pixi.Sprite(arrowTexture);
+      arrows.push(arrow);
+      stage.addChild(arrow);
     }
-      // iconSprite = new IconSprite('Entypo', 0x1F506, spriteOptions); // sun
-      // iconSprite = new IconSprite('Entypo', 0x2601, spriteOptions); // cloud
-      // iconSprite = new IconSprite('Entypo', 0x1F4A6, spriteOptions); // rain drop
-      // iconSprite = new IconSprite('Entypo', 0x266A, spriteOptions); // music note
-      // iconSprite = new IconSprite('Entypo', 0x2191, spriteOptions); // thin up arrow
-    var speed = 1/size * 120;
-    iconSprite.speedx = Math.cos(rotation) * speed;
-    iconSprite.speedy = Math.sin(rotation) * speed;
-    return iconSprite;
+    if (arrow !== undefined) {
+      var size = Math.ceil( Math.random() * 400 );
+      arrow.width = size;
+      arrow.height = size;
+      arrow.position.x = Math.random() * stageWidth;
+      arrow.position.y = Math.random() * stageHeight;
+
+      arrow.tint = Math.random() * 0xFFFFFF;
+      arrow.alpha = Math.random();
+      var speed = 1/size * 120;
+      var rotation = Math.random() * Math.PI * 2;
+      arrow.rotation = rotation;
+      arrow.speedx = Math.cos(rotation) * speed;
+      arrow.speedy = Math.sin(rotation) * speed;
+    }
   };
+
+  var updateArrow = function(arrow) {
+    var bounds = arrow.getBounds();
+    if (((bounds.y + bounds.height) < 0) ||
+        (bounds.y > stageHeight) ||
+        (bounds.x + bounds.width < 0) ||
+        (bounds.x > stageWidth)) {
+      initArrow(arrow);
+    } else {
+      arrow.position.x = arrow.position.x - arrow.speedx;
+      arrow.position.y = arrow.position.y - arrow.speedy;
+    }
+  }
 
   var stats = new Stats();
   stats.setMode(0); // 0: fps, 1: ms
@@ -63,41 +79,28 @@ window.onload = function(event){
   var currentTime = previousTime;
   var elapsedTime = 0;
 
-  var render = function() {
-
+  var animate = function() {
     currentTime = Date.now();
     elapsedTime = currentTime - previousTime;
 
     if (elapsedTime > fpsInterval) {
       stats.begin();
 
-      ctx.clearRect(0, 0, width, height);
-      if (arrows.length < 200) {
-        arrows.push(newArrow());
+      initArrow();
+
+      for (var i = 0; i < arrows.length; i++) {
+        updateArrow(arrows[i]);
       }
-      var len = arrows.length;
-      for(var i = 0; i < len; i++) {
-        var arrow = arrows[i];
-        if (((arrow.y + arrow.height) < 0) ||
-            (arrow.y > height) ||
-            (arrow.x + arrow.width < 0) ||
-            (arrow.x > width)) {
-          newArrow(arrow);
-        } else {
-          arrow.x = arrow.x - arrow.speedx;
-          arrow.y = arrow.y - arrow.speedy;
-        }
-        arrow.draw(ctx);
-      }
-      previousTime = currentTime - (elapsedTime % fpsInterval);
+
+      renderer.render(stage);
 
       stats.end();
     }
+    requestAnimationFrame(animate);
+  }
 
-    requestAnimationFrame(render);
-  };
+  requestAnimationFrame(animate);
 
-  requestAnimationFrame(render);
 };
 
 

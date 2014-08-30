@@ -103,7 +103,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-css-url-embed');
 
   // Default task
-  grunt.registerTask('default', ['jshint', 'browserify', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'browserify']);
+  grunt.registerTask('production', ['jshint', 'browserify', 'uglify']);
   grunt.registerTask('css', ['cssUrlEmbed']);
 };
 
